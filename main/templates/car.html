@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+		  <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="oi oi-menu"></span> Menu
+		  </button>
+	
+		  <div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
+				<li class="nav-item active"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+				<li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
+				<li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
+				<li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+			  </ul>
+			<ul class="navbar-nav ml-auto">
+				
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="fas fa-shopping-cart"></i>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="fas fa-user"></i>
+					</a>
+				</li>
+			</ul>
+		  </div>
+		</div>
+	</nav>
+    <!-- END nav -->
+    
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_3.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Cars <i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-3 bread">Choose Your Car</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+		<section class="ftco-section bg-light">
+    	<div class="container">
+    		<div class="row">
+				<div class="mb-5">
+					<form class="form-inline " action="{% url 'cars' %}" method='get'>
+						<div class="form-group mx-sm-3 mb-2">
+						  <label for="pickup-location" class="sr-only">Pick up location</label>
+						  <input type="text" class="form-control" name="pick_up_location" placeholder="Pick up location">
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+						  <label for="start-date" class="sr-only">Start date</label>
+						  <input type="date" class="form-control" name="start_date" placeholder="Start date">
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+						  <label for="end-date" class="sr-only">End date</label>
+						  <input type="date" class="form-control" name="end_date" placeholder="End date">
+						</div>
+						<button type="submit" class="btn btn-primary mb-2">Filter</button>
+					  </form>
+				</div>
+				
+				{% for car in featuerd_cars %}
+						<div class="col-md-4">
+							<div class="car-wrap rounded ftco-animate">
+								<div class="img rounded d-flex align-items-end" style="background-image: url({{car.images.first.img.url}});">
+								</div>
+								<div class="text">
+									<h2 class="mb-0"><a href="car-single.html">{{car.brand_model.brand.name}} {{car.brand_model.name}} {{car.brand_model.year|date:"Y"}}</a></h2>
+									<div class="d-flex mb-3">
+										<span class="cat">{{car.brand_model.brand.name}}</span>
+										<p class="price ml-auto">${{car.price}} <span>/day</span></p>
+									</div>
+									<form>
+										<p class="d-flex mb-0 d-block"><a href="{% url 'reservation_form' %}" class="btn btn-primary py-2 mr-1" onclick="add_car_to_cart({{car.id}})">Book now</a> <a href="{{ car.get_absolute_url }}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+									</form>
+								</div>
+							</div>
+						</div>
+
+				{% endfor %}
+
+
+    		</div>
+    		<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+					<ul>
+						{% if page_obj.has_previous %}
+							<li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+						{% endif %}
+						{% for i in page_obj.paginator.page_range %}
+							{% if page_obj.number == i %}
+								<li class="active" href="?page={{i}}"><span>{{i}}</span></li>
+							{% else %}
+								<li><a href="?page={{i}}">{{i}}</a></li>
+							{% endif %}
+						{% endfor %}
+						{% if page_obj.has_next %}
+							<li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+						{% endif %}
+					</ul>
+					</div>
+				</div>
+        	</div>
+			
+    	</div>
+    </section>
+    
+
+
+
+
+{% endblock %}

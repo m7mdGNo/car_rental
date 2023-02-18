@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block content %}
+    
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+        </button>
+    
+        <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+          <li class="nav-item active"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
+          <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+          </ul>
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+        </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+    
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_3.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Blog <i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-3 bread">Our Blog</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row d-flex justify-content-center">
+
+          {% for blog in blogs %}
+          <div class="col-md-12 text-center d-flex ftco-animate">
+          	<div class="blog-entry justify-content-end mb-md-5">
+              <a href="blog-single.html" class="block-20 img" style="background-image: url({{blog.img.url}});">
+              </a>
+              <div class="text px-md-5 pt-4">
+              	<div class="meta mb-3">
+                  <div><a href="#">{{blog.created_at|date:"M. d, Y"}}</a></div>
+                  <div><a href="#">{{blog.user.first_name}}</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span>{{blog.reviews_count}}</a></div>
+                </div>
+                <h3 class="heading mt-2"><a href="#">{{blog.title}}</a></h3>
+                <p>{{blog.describtion|truncatechars:180}}</p>
+                <p><a href="blog-single.html" class="btn btn-primary">Continue <span class="icon-long-arrow-right"></span></a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        <div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+              <ul>
+                {% if page_obj.has_previous %}
+                  <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                  {% if page_obj.number == i %}
+                    <li class="active" href="?page={{i}}"><span>{{i}}</span></li>
+                  {% else %}
+                    <li><a href="?page={{i}}">{{i}}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                  <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+{% endblock %}

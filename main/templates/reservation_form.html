@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block content %}
+    
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+        </button>
+    
+        <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+          <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
+          <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+          </ul>
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+        </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_3.jpg' %});" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
+              <h1 class="mb-3 bread">Reservation</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container shadow-lg rounded">
+        <form method="POST" class="mt-4">
+          {% csrf_token %}
+          <div class="form-group">
+            
+            <label for="country" class="mt-3">Country:</label>
+            <input type="text" name="country" id="country" class="form-control">
+            {% if form.country.errors %}
+            <div class="alert-danger">
+                {{form.country.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" name="city" id="city" class="form-control">
+            {% if form.city.errors %}
+            <div class="alert-danger">
+                {{form.city.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" class="form-control">
+            {% if form.email.errors %}
+            <div class="alert-danger">
+                {{form.email.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control">
+                {% if form.start_date.errors %}
+            <div class="alert-danger">
+                {{form.start_date.errors}}
+            </div>
+            {% endif %}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control">
+                {% if form.end_date.errors %}
+            <div class="alert-danger">
+                {{form.end_date.errors}}
+            </div>
+            {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pick_up_location">Pick Up Location:</label>
+            <input type="text" name="pick_up_location" id="pick_up_location" class="form-control">
+            {% if form.pick_up_location.errors %}
+            <div class="alert-danger">
+                {{form.pick_up_location.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="payment_method">Payment Method:</label>
+            <select name="payment_method" id="payment_method" class="form-control">
+                <option value="cash_on_delivery">Cash on delivery</option>
+                <option value="online_payment">Online Payment</option>
+              </select>
+          </div>
+          <div class="card mt-4">
+            <div class="card-header">
+              Reservation Summary
+            </div>
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-6">Start Date:</div>
+                <div class="col-6 text-right" id="start-date-value">--</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6">End Date:</div>
+                <div class="col-6 text-right"id="end-date-value">--</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6">Pick Up Location:</div>
+                <div class="col-6 text-right"id="pick-up-location-value">--</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6">Payment Method:</div>
+                <div class="col-6 text-right"id="payment-method-value">--</div>
+              </div>
+              <hr>
+              <div class="row mb-2">
+                <div class="col-6">Total Price:</div>
+                <div class="col-6 text-right"id="total-price-value">--</div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mt-4 mb-4">Rent</button>
+        </form>
+      </div>
+      
+
+
+      <script>
+            const startDateInput = document.getElementById("start_date");
+            const endDateInput = document.getElementById("end_date");
+            const pickUpLocationInput = document.getElementById("pick_up_location");
+            const paymentmethodInput = document.querySelector("#payment_method");
+            const carPrice = {{user.cart.first.price}};
+        
+            function updateStartDateReservationSummary() {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
+                const pickUpLocation = pickUpLocationInput.value;
+                const payment_method = paymentmethodInput.value.replace(/_/g," ");
+                const totalPrice = days * carPrice;
+                
+                document.getElementById("start-date-value").textContent = startDate.toLocaleDateString();
+                document.getElementById("total-price-value").textContent = totalPrice.toFixed(2);
+        
+            }
+            function updateEndDateReservationSummary() {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
+                const pickUpLocation = pickUpLocationInput.value;
+                const payment_method = paymentmethodInput.value.replace(/_/g," ");
+                const totalPrice = days * carPrice;
+                
+                document.getElementById("end-date-value").textContent = endDate.toLocaleDateString();
+                document.getElementById("total-price-value").textContent = totalPrice.toFixed(2);
+            
+                }
+            function updatePickUpLocationReservationSummary() {
+                const pickUpLocation = pickUpLocationInput.value;
+                document.getElementById("pick-up-location-value").textContent = pickUpLocation;
+            }
+
+            function updatePaymantMethodReservationSummary() {
+                const payment_method = paymentmethodInput.value.replace(/_/g," ");
+                document.getElementById("payment-method-value").textContent = payment_method;
+                }
+        
+            startDateInput.addEventListener("change", updateStartDateReservationSummary);
+            endDateInput.addEventListener("change", updateEndDateReservationSummary);
+            pickUpLocationInput.addEventListener("change", updatePickUpLocationReservationSummary);
+            paymentmethodInput.addEventListener("change", updatePaymantMethodReservationSummary);
+      
+      </script>
+    {% endblock %}

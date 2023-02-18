@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+  
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+            <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+
+              <li class="nav-item">
+                  <a href="#" class="nav-link">
+                      <i class="fas fa-shopping-cart"></i>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="#" class="nav-link">
+                      <i class="fas fa-user"></i>
+                  </a>
+              </li>
+          </ul>
+        </div>
+      </div>
+  </nav>
+  
+    <!-- END nav -->
+    
+    <div class="hero-wrap ftco-degree-bg" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
+          <div class="col-lg-8 ftco-animate">
+          	<div class="text w-100 text-center mb-md-5 pb-md-5">
+	            <h1 class="mb-4">Fast &amp; Easy Way To Rent A Car</h1>
+	            <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts</p>
+	            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12	featured-top">
+    				<div class="row no-gutters">
+	  					<div class="col-md-4 d-flex align-items-center">
+
+	  						<form id="filter_form" action="{% url 'cars' %}" method='get' class="request-form ftco-animate bg-primary">
+		          		<h2>Make your trip</h2>
+			    				<div class="form-group">
+			    					<label for="" class="label">Pick-up location</label>
+			    					<input name='pick_up_location' type="text" class="form-control" placeholder="City, Airport, Station, etc">
+			    				</div>
+			    				<div class="d-flex">
+			    					<div class="form-group mr-2">
+			                <label for="" class="label">Pick-up date</label>
+			                <input name='start_date' type="date" class="form-control" placeholder="Date">
+			              </div>
+			              <div class="form-group ml-2">
+			                <label for="" class="label">Drop-off date</label>
+			                <input name='end_date' type="date" class="form-control" placeholder="Date">
+			              </div>
+		              </div>
+			            <div class="form-group">
+			              <input type="submit" value="Rent A Car Now" class="btn btn-secondary py-3 px-4">
+			            </div>
+			    			</form>
+
+	  					</div>
+	  					<div class="col-md-8 d-flex align-items-center">
+	  						<div class="services-wrap rounded-right w-100">
+	  							<h3 class="heading-section mb-4">Better Way to Rent Your Perfect Cars</h3>
+	  							<div class="row d-flex mb-4">
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Choose Your Pickup Location</h3>
+				                </div>
+					            </div>      
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Select the Best Deal</h3>
+					              </div>
+					            </div>      
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Reserve Your Rental Car</h3>
+					              </div>
+					            </div>      
+					          </div>
+					        </div>
+					        <p><a href="{% url 'cars' %}" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
+	  						</div>
+	  					</div>
+	  				</div>
+				</div>
+  		</div>
+    </section>
+
+
+    <section class="ftco-section ftco-no-pt bg-light">
+    	<div class="container">
+    		<div class="row justify-content-center">
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          	<span class="subheading">What we offer</span>
+            <h2 class="mb-2">Feeatured Vehicles</h2>
+          </div>
+        </div>
+    		<div class="row">
+    			<div class="col-md-12">
+    				<div class="carousel-car owl-carousel">
+
+              {% for car in featuerd_cars %}
+                <div class="item">
+                  <div class="car-wrap rounded ftco-animate">
+                    <div class="img rounded d-flex align-items-end" style="background-image: url({{car.images.first.img.url}});">
+                    </div>
+                    <div class="text">
+                      <h2 class="mb-0"><a href="#">{{car.brand_model.brand.name}} {{car.brand_model.name}} {{car.brand_model.year|date:"Y"}}</a></h2>
+                      <div class="d-flex mb-3">
+                        <span class="cat">{{car.brand_model.brand.name}}</span>
+                        <p class="price ml-auto">${{car.price}} <span>/day</span></p>
+                      </div>
+                      <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="{{ car.get_absolute_url }}" class="btn btn-secondary py-2 ml-1">Details</a></p>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </section>
+
+    <section class="ftco-section ftco-about">
+			<div class="container">
+				<div class="row no-gutters">
+					<div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url({% static 'images/about.jpg' %});">
+					</div>
+					<div class="col-md-6 wrap-about ftco-animate">
+	          <div class="heading-section heading-section-white pl-md-5">
+	          	<span class="subheading">About us</span>
+	            <h2 class="mb-4">Welcome to Carbook</h2>
+
+	            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	            <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+	            <p><a href="{% url 'cars' %}" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
+	          </div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+    <section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+          	<span class="subheading">Services</span>
+            <h2 class="mb-3">Our Latest Services</h2>
+          </div>
+        </div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-wedding-car"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Wedding Ceremony</h3>
+                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">City Transfer</h3>
+                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-car"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Airport Transfer</h3>
+                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Whole City Tour</h3>
+                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              </div>
+            </div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+          	<span class="subheading">Blog</span>
+            <h2>Recent Blog</h2>
+          </div>
+        </div>
+        <div class="row d-flex">
+
+
+          {% for blog in blogs %}
+          
+          <div class="col-md-4 d-flex ftco-animate">
+          	<div class="blog-entry justify-content-end">
+              <a href="blog-single.html" class="block-20" style="background-image: url({{blog.img.url}});">
+              </a>
+              <div class="text pt-4">
+              	<div class="meta mb-3">
+                  <div><a href="#">{{blog.created_at|date:"M. d, Y"}}</a></div>
+                  <div><a href="#">{{blog.user.first_name}}</a></div>
+                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span>{{blog.reviews_count}}</a></div>
+                </div>
+                <h3 class="heading mt-2"><a href="#">{{blog.title}}</a></h3>
+                <p><a href="#" class="btn btn-primary">Read more</a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+
+        </div>
+      </div>
+    </section>	
+{% comment %} <script>
+    function get_form_data(){
+      var pick_up_location = document.getElementById("pick_up_location").value;
+      var start_date = document.getElementById("start_date").value;
+      var end_date = document.getElementById("end_date").value;
+      var query_params = '?'+'pick_up_location='+pick_up_location+'&'+'start_date='+start_date+'&'+'end_date='+end_date;
+      
+      filter_form.action = {% url 'cars' %}+query_params;
+    };
+    var filter_form = document.forms[0];
+
+    filter_form.addEventListener('submit',get_form_data(),false);
+</script> {% endcomment %}
+
+
+{% endblock %}
+
