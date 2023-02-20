@@ -3,3 +3,4 @@ django-environ==0.9.0
 psycopg2-binary==2.9.5
 pillow==9.4.0
 django-filter==22.1
+stripe==5.2.0

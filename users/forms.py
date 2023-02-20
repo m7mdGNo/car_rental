@@ -1,10 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from .models import User
-
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
@@ -46,39 +45,37 @@ class UserEditForm(forms.ModelForm):
             "password",
             "first_name",
             "last_name",
+            "image",
             "is_active",
             "is_staff",
             "is_superuser",
         )
 
 
-class DeliveryDetailsForm(forms.ModelForm):
-    first_name = forms.CharField(required=True, label="First Name")
-    last_name = forms.CharField(required=True, label="Last Name")
-    email = forms.EmailField(required=True, label="Email")
-    phone = forms.CharField(required=True, label="Phone")
-    alt_phone = forms.CharField(required=False, label="Alternative Phone")
-    country = forms.CharField(required=True, label="Country")
-    state = forms.IntegerField(required=True, label="State")
-    street = forms.IntegerField(required=True , label="Street")
-    zone = forms.IntegerField(required=True, label="Zone")
-    address = forms.IntegerField(required=True, label="Address")
-    notes = forms.CharField(required=False, label="Notes")
-    is_fast_delivery = forms.BooleanField(initial=False, required=False, label="Fast Delivary")
+
+class LoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+        if email and password:
+            user = authenticate(email=email, password=password)
+            if not user:
+                raise forms.ValidationError('Invalid email or password')
+        return cleaned_data
+    
+    
+    
+class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
         fields = (
-            "country",
-            "alt_phone",
-            "state",
-            "street",
-            "zone",
-            "address",
-            "notes",
-            "is_fast_delivery",
+            "email",
             "first_name",
             "last_name",
-            "email",
-            "phone",
+            "image",
         )

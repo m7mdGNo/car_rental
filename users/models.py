@@ -41,6 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     temp_password = models.CharField(max_length=100, null=True, blank=True)
+    
+    image = models.ImageField(default='profile.png')
 
     cart = models.ManyToManyField(
         Car, through="CartItem", blank=True, related_name="cart"

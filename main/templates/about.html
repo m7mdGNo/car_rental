@@ -14,7 +14,7 @@
             <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
             <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
             <li class="nav-item active"><a href="{% url 'about'%}" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+            <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
             </ul>
           <ul class="navbar-nav ml-auto">
 
@@ -24,7 +24,7 @@
                   </a>
               </li>
               <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{% url 'profile' %}" class="nav-link">
                       <i class="fas fa-user"></i>
                   </a>
               </li>
@@ -59,7 +59,7 @@
 
 	            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
 	            <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-	            <p><a href="#" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
+	            <p><a href="{% url 'cars' %}" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
 	          </div>
 					</div>
 				</div>

@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block content %}
+    
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+        </button>
+    
+        <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+          <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
+          <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
+          </ul>
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'profile' %}" class="nav-link active">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+        </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_3.jpg' %});" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
+              <h1 class="mb-3 bread">Reservation</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <style>
+        .profile-image-wrapper {
+          position: relative;
+          display: inline-block;
+        }
+        
+        .edit-icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 24px;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        #profile-image:hover + .edit-icon {
+          opacity: 1;
+        }
+
+        #profile-image:hover {
+            filter: blur(4px);
+          }
+
+
+        </style>
+      
+      <div class="container mt-4">
+
+          <section class=" p-4 mb-4 shadow-lg">
+            <div class="row">
+              <div class="col-md-4">
+                <form method="post" action="{% url 'profile_update' %}" enctype="multipart/form-data">
+                <div class="profile-image-wrapper">
+                    <img id="profile-image" src="{{ user.image.url }}" class="img-fluid rounded-circle mb-2" alt="Profile Image" style="height: 350px; width: 350px; object-fit: cover;" >
+                    <i class="fas fa-edit edit-icon text-white"></i>
+                    <input type="file" id="image-input" accept="image/*" style="display:none" name='image'>
+                  </div>
+              </div>
+              <div class="col-md-8">
+                <h2>Profile Information</h2>
+                
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="id_first_name">First Name:</label>
+                    <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ user.first_name }}">
+                  </div>
+                  <div class="form-group">
+                    <label for="id_last_name">Last Name:</label>
+                    <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ user.last_name }}">
+                  </div>
+                  <div class="form-group">
+                    <label for="id_email">Email:</label>
+                    <input type="email" class="form-control" id="id_email" name="email" value="{{ user.email }}">
+                  </div>
+                  <button type="submit" class="btn btn-lg  btn-primary mt-2 ">Update Information</button>
+                </form>
+              </div>
+            </div>
+          
+            <hr>
+          
+            <h2 class="text-center mt-2 mb-4">Reservations History</h2>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">Order ID</th>
+                    <th class="text-center">Product Name</th>
+                    <th class="text-center">Start Date</th>
+                    <th class="text-center">End Date</th>
+                    <th class="text-center">Pick Up Location</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Total<th/>
+                    <th class="text-center">Actions<th/>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for reservation in reservations %}
+                  <tr>
+                    <td class="text-center">{{ reservation.id }}</td>
+                    <td class="text-center">{{ reservation.items.first.car.brand_model.brand.name }} {{ reservation.items.first.car.brand_model.name }} {{ reservation.items.first.car.brand_model.year|date:"Y" }}</td>
+                    <td class="text-center">{{ reservation.start_date }}</td>
+                    <td class="text-center">{{ reservation.end_date }}</td>
+                    <td class="text-center">{{ reservation.pick_up_location }}</td>
+                    <td class="text-center">{{ reservation.status }}</td>
+                    <td class="text-center">{{ reservation.total }} $</td>
+                    <td class="text-center"></td>
+                    {% if reservation.status == 'paid' %}
+                    <td class="text-center"><a href="{% url 'delete_reservation' reservation.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                    {% else %}
+                    <td class="text-center"><a href="#" class="btn btn-sm btn-danger disabled pointer-events-none">Delete</a></td>
+                    {% endif %}
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="6" class="text-center">No orders found.</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            
+          </section>
+      </div>
+
+      
+      <script>
+        // Get the image and input elements
+        const profileImage = document.getElementById('profile-image');
+        const imageInput = document.getElementById('image-input');
+      
+        // Add a click event listener to the image
+        profileImage.addEventListener('click', () => {
+          // Trigger the file input dialog
+          imageInput.click();
+        });
+      
+        // Add a change event listener to the file input
+        imageInput.addEventListener('change', () => {
+          // Get the selected file
+          const file = imageInput.files[0];
+      
+          // Create a URL for the selected file
+          const url = URL.createObjectURL(file);
+      
+          // Update the image src attribute with the new URL
+          profileImage.src = url;
+      
+          // Submit the form to upload the image
+          document.getElementById('profile-form').submit();
+        });
+      </script>
+      
+      {% endblock %}

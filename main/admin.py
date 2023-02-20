@@ -86,3 +86,6 @@ class BlogAdmin(admin.ModelAdmin):
     search_fields = ["title", "user"]
 
     inlines = [BlogReviewTabularInline]
+
+
+admin.site.register(models.ContactUs)

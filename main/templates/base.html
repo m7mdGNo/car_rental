@@ -30,6 +30,7 @@
 
   </head>
   <body>
+    
     {% block content%}
     {% endblock %}
     <section class="ftco-counter ftco-section img bg-light" id="section-counter">
@@ -157,29 +158,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 <script src="{% static 'js/google-map.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
-{% csrf_token %}
-<script> 
-  function add_car_to_cart(car_id){
-    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    var data = new URLSearchParams();
-    data.append('car_id', '99');
-    fetch('/add_to_cart/?' + data, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-CSRFToken': csrftoken
-      },
-      body: data
-    })
-    .then(response => {
-      console.log("fadihfldaskjfdlkfjdlkafjadlkfja")
-      console.log(response)
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  };
-</script>
 
 
 </body>

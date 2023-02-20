@@ -6,8 +6,9 @@ from .views import (
     BlogListView,
     SingleCarView,
     ReservationView,
-    LoginView,
     AddCarToCart,
+    DeleteReservation,
+    ContactUsView
 )
 
 
@@ -18,6 +19,7 @@ urlpatterns = [
     path("blog/", BlogListView.as_view(), name="blog"),
     path("cars/<int:pk>/", SingleCarView.as_view(), name="single_car"),
     path('reservation/',ReservationView.as_view(),name='reservation_form'),
-    path('login/',LoginView.as_view(),name='login'),
-    path('add_to_cart/',AddCarToCart.as_view())
+    path('add_to_cart/',AddCarToCart.as_view(),name='add_to_cart'),
+    path('reservation/<int:id>/delete/',DeleteReservation,name='delete_reservation'),
+    path('contactus/',ContactUsView.as_view(),name='contact_us')
 ]

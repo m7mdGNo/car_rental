@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reservation
+from .models import Reservation,ContactUs
 
 
         
@@ -10,7 +10,6 @@ class ReservationForm(forms.ModelForm):
     pick_up_location = forms.CharField(max_length=100 ,required=True)
     start_date = forms.DateField(required=True)
     end_date = forms.DateField(required=True)
-    payment_method = forms.ChoiceField(choices=Reservation.PaymentChoices.choices,required=True)
 
     class Meta:
         model = Reservation
@@ -21,5 +20,23 @@ class ReservationForm(forms.ModelForm):
             "start_date",
             "end_date",
             "pick_up_location",
-            "payment_method",
+        )
+        
+        
+        
+class ContactUsForm(forms.ModelForm):
+    name = forms.CharField(max_length=100 ,required=True)
+    email = forms.CharField(max_length=100 ,required=True)
+    subject = forms.CharField(max_length=100 ,required=True)
+    message = forms.CharField(max_length=100 ,required=True)
+
+
+    class Meta:
+        model = ContactUs
+        fields = (
+            "name",
+            "email",
+            "subject",
+            "message",
+
         )

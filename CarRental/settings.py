@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     
     'users',
     'main',
-    'django_filters'
+    'django_filters',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ ROOT_URLCONF = "CarRental.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates'),],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -138,3 +139,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'users.User'
 
+#stripe settings
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_ENDPOINT_SECRET = env('STRIPE_ENDPOINT_SECRET')
+
+
+#domain
+DOMAIN= env('DOMAIN')

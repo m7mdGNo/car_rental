@@ -16,14 +16,14 @@ class AvailableCarsFilter(django_filters.FilterSet):
     def filter_by_start_date(self, queryset, name, value):
         start_datetime = value
         return queryset.exclude(
-            reservation_items__reservation__start_date__lt=start_datetime,
-            reservation_items__reservation__end_date__gt=start_datetime,
+            reservation_cars__reservation__start_date__lt=start_datetime,
+            reservation_cars__reservation__end_date__gt=start_datetime,
         )
 
     def filter_by_end_date(self, queryset, name, value):
         end_datetime = value
 
         return queryset.exclude(
-            reservation_items__reservation__start_date__lt=end_datetime,
-            reservation_items__reservation__end_date__gt=end_datetime,
+            reservation_cars__reservation__start_date__lt=end_datetime,
+            reservation_cars__reservation__end_date__gt=end_datetime,
         )

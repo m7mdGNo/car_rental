@@ -78,7 +78,7 @@ class Car_imgs(models.Model):
 
 
 class Reservation(models.Model):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE,related_name='reservations')
     country = models.CharField(max_length=20, null=True, blank=True)
     city = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField()
@@ -86,14 +86,6 @@ class Reservation(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     pick_up_location = models.CharField(max_length=100)
-
-    class PaymentChoices(models.TextChoices):
-        CASH_ON_DELIVERY = "cash_on_delivery", "Cash on delivery"
-        ONLINE_PAYMENT = "online_payment", "Online Payment"
-
-    payment_method = models.CharField(
-        max_length=150, choices=PaymentChoices.choices, default="cash_on_delivery"
-    )
 
     class StatusChoices(models.TextChoices):
         UNPAID = "unpaid", "Unpaid"
@@ -130,7 +122,7 @@ class ReservationItem(models.Model):
         Reservation, related_name="items", on_delete=models.CASCADE
     )
     car = models.ForeignKey(
-        Car, related_name="reservation_items", on_delete=models.CASCADE
+        Car, related_name="reservation_cars", on_delete=models.CASCADE
     )
     price = models.FloatField()
 
@@ -174,3 +166,15 @@ class BlogReview(models.Model):
 
     class Meta:
         unique_together = ["user", "blog"]
+
+
+
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=100)
+    message = models.TextField(max_length=1000)
+    
+    def __str__(self) -> str:
+        return self.name

@@ -15,7 +15,7 @@
           <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
           <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
           <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
           </ul>
         <ul class="navbar-nav ml-auto">
           
@@ -25,7 +25,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'profile' %}" class="nav-link">
               <i class="fas fa-user"></i>
             </a>
           </li>
@@ -111,13 +111,6 @@
             </div>
             {% endif %}
           </div>
-          <div class="form-group">
-            <label for="payment_method">Payment Method:</label>
-            <select name="payment_method" id="payment_method" class="form-control">
-                <option value="cash_on_delivery">Cash on delivery</option>
-                <option value="online_payment">Online Payment</option>
-              </select>
-          </div>
           <div class="card mt-4">
             <div class="card-header">
               Reservation Summary
@@ -134,10 +127,6 @@
               <div class="row mb-2">
                 <div class="col-6">Pick Up Location:</div>
                 <div class="col-6 text-right"id="pick-up-location-value">--</div>
-              </div>
-              <div class="row mb-2">
-                <div class="col-6">Payment Method:</div>
-                <div class="col-6 text-right"id="payment-method-value">--</div>
               </div>
               <hr>
               <div class="row mb-2">
@@ -156,7 +145,6 @@
             const startDateInput = document.getElementById("start_date");
             const endDateInput = document.getElementById("end_date");
             const pickUpLocationInput = document.getElementById("pick_up_location");
-            const paymentmethodInput = document.querySelector("#payment_method");
             const carPrice = {{user.cart.first.price}};
         
             function updateStartDateReservationSummary() {
@@ -164,7 +152,6 @@
                 const endDate = new Date(endDateInput.value);
                 const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
                 const pickUpLocation = pickUpLocationInput.value;
-                const payment_method = paymentmethodInput.value.replace(/_/g," ");
                 const totalPrice = days * carPrice;
                 
                 document.getElementById("start-date-value").textContent = startDate.toLocaleDateString();
@@ -176,7 +163,6 @@
                 const endDate = new Date(endDateInput.value);
                 const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
                 const pickUpLocation = pickUpLocationInput.value;
-                const payment_method = paymentmethodInput.value.replace(/_/g," ");
                 const totalPrice = days * carPrice;
                 
                 document.getElementById("end-date-value").textContent = endDate.toLocaleDateString();
@@ -188,15 +174,9 @@
                 document.getElementById("pick-up-location-value").textContent = pickUpLocation;
             }
 
-            function updatePaymantMethodReservationSummary() {
-                const payment_method = paymentmethodInput.value.replace(/_/g," ");
-                document.getElementById("payment-method-value").textContent = payment_method;
-                }
-        
             startDateInput.addEventListener("change", updateStartDateReservationSummary);
             endDateInput.addEventListener("change", updateEndDateReservationSummary);
             pickUpLocationInput.addEventListener("change", updatePickUpLocationReservationSummary);
-            paymentmethodInput.addEventListener("change", updatePaymantMethodReservationSummary);
       
       </script>
     {% endblock %}

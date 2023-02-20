@@ -14,7 +14,7 @@
 				<li class="nav-item active"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
 				<li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
 				<li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
-				<li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Contact</a></li>
+				<li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
 			  </ul>
 			<ul class="navbar-nav ml-auto">
 				
@@ -24,7 +24,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="#" class="nav-link">
+					<a href="{% url 'profile' %}" class="nav-link">
 						<i class="fas fa-user"></i>
 					</a>
 				</li>
@@ -68,7 +68,7 @@
 					  </form>
 				</div>
 				
-				{% for car in featuerd_cars %}
+				{% for car in featured_cars %}
 						<div class="col-md-4">
 							<div class="car-wrap rounded ftco-animate">
 								<div class="img rounded d-flex align-items-end" style="background-image: url({{car.images.first.img.url}});">
@@ -79,9 +79,7 @@
 										<span class="cat">{{car.brand_model.brand.name}}</span>
 										<p class="price ml-auto">${{car.price}} <span>/day</span></p>
 									</div>
-									<form>
-										<p class="d-flex mb-0 d-block"><a href="{% url 'reservation_form' %}" class="btn btn-primary py-2 mr-1" onclick="add_car_to_cart({{car.id}})">Book now</a> <a href="{{ car.get_absolute_url }}" class="btn btn-secondary py-2 ml-1">Details</a></p>
-									</form>
+										<p class="d-flex mb-0 d-block"><a href="{% url 'reservation_form' %}" onclick="add_to_cart({{car.id}})" class="btn btn-primary py-2 mr-1" >Book now</a> <a href="{{ car.get_absolute_url }}" class="btn btn-secondary py-2 ml-1">Details</a></p>
 								</div>
 							</div>
 						</div>
@@ -116,7 +114,28 @@
     </section>
     
 
-
+	{% csrf_token %}
+	<script> 
+	  function add_to_cart(car_id){
+		var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+		var data = new URLSearchParams();
+		data.append('car_id', car_id);
+		fetch('/add_to_cart/?' + data, {
+		  method: 'POST',
+		  headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'X-CSRFToken': csrftoken
+		  },
+		  body: data
+		})
+		.then(response => {
+		  console.log(response)
+		})
+		.catch(error => {
+		  console.error('Error:', error);
+		});
+	  };
+	</script>
 
 
 {% endblock %}
