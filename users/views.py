@@ -102,7 +102,7 @@ class ProfileView(LoginRequiredMixin, generic.TemplateView):
         return ctx
 
 
-@login_required('login')
+@login_required(login_url='login')
 def ProfileUpdate(request):
     if request.method == "POST":
         form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
