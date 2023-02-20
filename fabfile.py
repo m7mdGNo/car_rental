@@ -2,7 +2,7 @@ import os
 from fabric.api import *
 
 env.hosts = ['ubuntu@52.0.149.168']
-PROJECT_DIR = '/home/ubuntu/car rental'
+PROJECT_DIR = '/home/ubuntu/car_rental'
 
 
 def install_fixture(fixture):
