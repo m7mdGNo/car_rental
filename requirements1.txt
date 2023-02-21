@@ -1,9 +1,0 @@
-django==4.1.6
-django-environ==0.9.0
-psycopg2-binary==2.9.5
-psycopg2==2.9.5
-pillow==9.4.0
-django-filter==22.1
-stripe==5.2.0
-Fabric3@git+https://github.com/ahmedyasserays/fabric.git@ff01d6b7c65ca6477261a92765e25b5f36fa8dfa
-gunicorn==20.1.0
