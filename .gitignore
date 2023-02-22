@@ -116,3 +116,5 @@ venv.bak/
 
 github
 github.pub
+
+db.json

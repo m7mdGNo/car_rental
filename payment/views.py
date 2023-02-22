@@ -21,6 +21,14 @@ stripe_pub_key = settings.STRIPE_PUBLIC_KEY
 stripe_secret_key = settings.STRIPE_SECRET_KEY
 stripe.api_key = stripe_secret_key
 
+endpoint = stripe.WebhookEndpoint.create(
+  url='http://44.204.126.208/payment/webhooks/stripe/',
+  enabled_events=[
+    'charge.failed',
+    'charge.succeeded',
+  ],
+)
+
 
 def checkout(request, reservation_id):
     reservation = (
