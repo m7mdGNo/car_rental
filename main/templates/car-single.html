@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
+
     {% block content %}
-    
+    <style>
+		.star i.yellow {
+		color: #ffcc00;
+	  }
+	  .star i.gray {
+		color: #ccc;
+	  }
+	  </style>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
         <a class="navbar-brand" href="{% url 'home'%}">Car<span>Book</span></a>
@@ -12,7 +20,7 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
-          <li class="nav-item active"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+          <li class="nav-item active">
           <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
           <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
           <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
@@ -21,7 +29,7 @@
           
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fas fa-shopping-cart"></i>
+              
             </a>
           </li>
           <li class="nav-item">
@@ -198,67 +206,29 @@
 						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
 						      <div class="row">
 							   		<div class="col-md-7">
-							   			<h3 class="head">23 Reviews</h3>
-							   			<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url({% static 'images/person_1.jpg' %})"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
-									   	<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url({% static 'images/person_2.jpg' %})"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
-									   	<div class="review d-flex">
-									   		<div class="user-img" style="background-image: url({% static 'images/person_3.jpg' %})"></div>
-									   		<div class="desc">
-									   			<h4>
-									   				<span class="text-left">Jacob Webb</span>
-									   				<span class="text-right">14 March 2018</span>
-									   			</h4>
-									   			<p class="star">
-									   				<span>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-									   					<i class="ion-ios-star"></i>
-								   					</span>
-								   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-									   			</p>
-									   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-									   		</div>
-									   	</div>
+							   			<h3 class="head">{{reviews_counter}} Reviews</h3>
+
+										{% for review in car.reviews.all %}
+										<div class="review d-flex">
+											<div class="user-img" style="background-image: url({{review.user.image.url}})"></div>
+											<div class="desc">
+												<h4>
+													<span class="text-left">{{review.user.email}}</span>
+													<span class="text-right">{{review.added_at|date:"d M Y"}}</span>
+												</h4>
+												<p class="star">
+													{% comment %} {% for i in car.rate %}
+													  <i class="ion-ios-star yellow"></i>
+													{% endfor %} {% endcomment %}
+													{% comment %} {% for i in 1|get_range %}
+													  <i class="ion-ios-star gray"></i>
+													{% endfor %} {% endcomment %}
+												  </p>
+												<p>{{review.comment}}</p>
+											</div>
+										</div>
+										{% endfor %}
+
 							   		</div>
 
 									{% comment %} TODO: form for addming review {% endcomment %}
@@ -282,31 +252,5 @@
       </div>
     </section>
 
-    <section class="ftco-section ftco-no-pt">
-    	<div class="container">
-    		<div class="row justify-content-center">
-          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-          	<span class="subheading">Choose Car</span>
-            <h2 class="mb-2">Recommened Cars</h2>
-          </div>
-        </div>
-        <div class="row">
-        	<div class="col-md-4">
-    				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url({% static 'images/car-1.jpg' %});">
-    					</div>
-    					<div class="text">
-    						<h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
-    						<div class="d-flex mb-3">
-	    						<span class="cat">Cheverolet</span>
-	    						<p class="price ml-auto">$500 <span>/day</span></p>
-    						</div>
-    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a></p>
-    					</div>
-    				</div>
-    			</div>
-        </div>
-    	</div>
-    </section>
-
+    
 {% endblock %}

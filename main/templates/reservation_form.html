@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+          <li class="nav-item">
           <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
           <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
           <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
@@ -21,7 +21,7 @@
           
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fas fa-shopping-cart"></i>
+              
             </a>
           </li>
           <li class="nav-item">
@@ -51,66 +51,78 @@
         <form method="POST" class="mt-4">
           {% csrf_token %}
           <div class="form-group">
-            
-            <label for="country" class="mt-3">Country:</label>
-            <input type="text" name="country" id="country" class="form-control">
-            {% if form.country.errors %}
-            <div class="alert-danger">
-                {{form.country.errors}}
-            </div>
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <label for="city">City:</label>
-            <input type="text" name="city" id="city" class="form-control">
-            {% if form.city.errors %}
-            <div class="alert-danger">
-                {{form.city.errors}}
-            </div>
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" class="form-control">
-            {% if form.email.errors %}
-            <div class="alert-danger">
-                {{form.email.errors}}
-            </div>
-            {% endif %}
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" id="start_date" class="form-control">
-                {% if form.start_date.errors %}
-            <div class="alert-danger">
-                {{form.start_date.errors}}
-            </div>
-            {% endif %}
+              <label for="first_name">First Name:</label>
+              <input type="text" name="first_name" id="first_name" class="form-control" value="{{ request.user.first_name }}">
+              {% if form.first_name.errors %}
+              <div class="alert-danger">
+                  {{form.first_name.errors}}
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" id="end_date" class="form-control">
-                {% if form.end_date.errors %}
-            <div class="alert-danger">
-                {{form.end_date.errors}}
-            </div>
-            {% endif %}
-              </div>
-            </div>
+              {% endif %}
           </div>
           <div class="form-group">
-            <label for="pick_up_location">Pick Up Location:</label>
-            <input type="text" name="pick_up_location" id="pick_up_location" class="form-control">
-            {% if form.pick_up_location.errors %}
-            <div class="alert-danger">
-                {{form.pick_up_location.errors}}
-            </div>
-            {% endif %}
+              <label for="last_name">Last Name:</label>
+              <input type="text" name="last_name" id="last_name" class="form-control" value="{{ request.user.last_name }}">
+              {% if form.last_name.errors %}
+              <div class="alert-danger">
+                  {{form.last_name.errors}}
+              </div>
+              {% endif %}
           </div>
+          <div class="form-group">
+              <label for="phone_number">Phone Number:</label>
+              <input type="text" name="phone_number" id="phone_number" class="form-control" value="{{ request.user.reservations.last.phone_number }}">
+              {% if form.phone_number.errors %}
+              <div class="alert-danger">
+                  {{form.phone_number.errors}}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              <label for="country" class="mt-3">Country:</label>
+              <input type="text" name="country" id="country" class="form-control" value="{{ request.user.reservations.last.country }}">
+              {% if form.country.errors %}
+              <div class="alert-danger">
+                  {{form.country.errors}}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              <label for="address">Address:</label>
+              <input type="text" name="address" id="address" class="form-control" value="{{ request.user.reservations.last.address }}">
+              {% if form.address.errors %}
+              <div class="alert-danger">
+                  {{form.address.errors}}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              <label for="postcode">Postcode:</label>
+              <input type="text" name="postcode" id="postcode" class="form-control" value="{{ request.user.reservations.last.postcode }}">
+              {% if form.postcode.errors %}
+              <div class="alert-danger">
+                  {{form.postcode.errors}}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              <label for="city">City:</label>
+              <input type="text" name="city" id="city" class="form-control" value="{{ request.user.reservations.last.city }}">
+              {% if form.city.errors %}
+              <div class="alert-danger">
+                  {{form.city.errors}}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" name="email" id="email" class="form-control" value="{{ request.user.email }}">
+              {% if form.email.errors %}
+              <div class="alert-danger">
+                  {{form.email.errors}}
+              </div>
+              {% endif %}
+          </div>
+
           <div class="card mt-4">
             <div class="card-header">
               Reservation Summary
@@ -118,15 +130,15 @@
             <div class="card-body">
               <div class="row mb-2">
                 <div class="col-6">Start Date:</div>
-                <div class="col-6 text-right" id="start-date-value">--</div>
+                <div class="col-6 text-right" id="start-date-value">{{request.user.cart_start_date}}</div>
               </div>
               <div class="row mb-2">
                 <div class="col-6">End Date:</div>
-                <div class="col-6 text-right"id="end-date-value">--</div>
+                <div class="col-6 text-right"id="end-date-value">{{request.user.cart_end_date}}</div>
               </div>
               <div class="row mb-2">
                 <div class="col-6">Pick Up Location:</div>
-                <div class="col-6 text-right"id="pick-up-location-value">--</div>
+                <div class="col-6 text-right"id="pick-up-location-value">{{request.user.cart_pick_up_location}}</div>
               </div>
               <hr>
               <div class="row mb-2">
@@ -139,44 +151,30 @@
         </form>
       </div>
       
+      
 
 
       <script>
-            const startDateInput = document.getElementById("start_date");
-            const endDateInput = document.getElementById("end_date");
-            const pickUpLocationInput = document.getElementById("pick_up_location");
-            const carPrice = {{user.cart.first.price}};
-        
-            function updateStartDateReservationSummary() {
-                const startDate = new Date(startDateInput.value);
-                const endDate = new Date(endDateInput.value);
-                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
-                const pickUpLocation = pickUpLocationInput.value;
-                const totalPrice = days * carPrice;
-                
-                document.getElementById("start-date-value").textContent = startDate.toLocaleDateString();
-                document.getElementById("total-price-value").textContent = totalPrice.toFixed(2);
-        
-            }
-            function updateEndDateReservationSummary() {
-                const startDate = new Date(startDateInput.value);
-                const endDate = new Date(endDateInput.value);
-                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // calculate the number of days between start and end date
-                const pickUpLocation = pickUpLocationInput.value;
-                const totalPrice = days * carPrice;
-                
-                document.getElementById("end-date-value").textContent = endDate.toLocaleDateString();
-                document.getElementById("total-price-value").textContent = totalPrice.toFixed(2);
-            
-                }
-            function updatePickUpLocationReservationSummary() {
-                const pickUpLocation = pickUpLocationInput.value;
-                document.getElementById("pick-up-location-value").textContent = pickUpLocation;
-            }
-
-            startDateInput.addEventListener("change", updateStartDateReservationSummary);
-            endDateInput.addEventListener("change", updateEndDateReservationSummary);
-            pickUpLocationInput.addEventListener("change", updatePickUpLocationReservationSummary);
+        // Get references to the start date, end date, and total price elements
+        const startDateEl = document.querySelector('#start-date-value');
+        const endDateEl = document.querySelector('#end-date-value');
+        const totalPriceEl = document.querySelector('#total-price-value');
       
+        // Get the start and end dates as Date objects
+        const startDate = new Date(startDateEl.textContent);
+        const endDate = new Date(endDateEl.textContent);
+    
+        // Calculate the difference between the start and end dates in days
+        const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+        // Calculate the total price by multiplying the difference in days by the cart price
+        const totalPrice = (diffDays+1) * {{request.user.cart.price}};
+    
+        // Update the total price element with the calculated total price
+        totalPriceEl.textContent = totalPrice.toFixed(2);
+
       </script>
+    
+
     {% endblock %}

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count, F,Avg
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
 
@@ -18,7 +18,7 @@ class Brand_Model(models.Model):
     )
     name = models.CharField(max_length=150)
     year = models.CharField(max_length=4)
-    color = models.CharField(max_length=150)
+
 
     class TransmissionChoices(models.TextChoices):
         MANUAL = "manual", "Manual"
@@ -61,15 +61,34 @@ class Car(models.Model):
     plate_number = models.CharField(max_length=12)
     description = models.TextField(max_length=1000)
     mileage = models.IntegerField()
+    color = models.CharField(max_length=150)
     added_at = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()
     accepted = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("single_car", args=[self.id])
+    
+    @property
+    def rate(self):
+        return self.reviews.aggregate(Avg("rate"))['rate__avg']
 
     def __str__(self) -> str:
         return f"{self.brand_model.brand.name}|{self.brand_model.name}"
+
+    
+
+class CarReview(models.Model):
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE,related_name='reviews')
+    rate = models.PositiveIntegerField(
+        validators=[MaxValueValidator(5, "Can't rate car with more than 5 starts")]
+    )
+    comment = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ["user", "car"]
 
 
 class Car_imgs(models.Model):
@@ -79,12 +98,18 @@ class Car_imgs(models.Model):
 
 class Reservation(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE,related_name='reservations')
-    country = models.CharField(max_length=20, null=True, blank=True)
-    city = models.CharField(max_length=20, null=True, blank=True)
+    car = models.ForeignKey(Car,on_delete=models.CASCADE,related_name='reservations')
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=150)
+    country = models.CharField(max_length=20)
+    address = models.CharField(max_length=150)
+    city = models.CharField(max_length=20)
+    postcode = models.CharField(max_length=150)
     email = models.EmailField()
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
     start_date = models.DateField()
     end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
     pick_up_location = models.CharField(max_length=100)
 
     class StatusChoices(models.TextChoices):
@@ -101,7 +126,7 @@ class Reservation(models.Model):
     )
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-created_at"]
 
     @property
     def count(self):
@@ -109,37 +134,15 @@ class Reservation(models.Model):
 
     @property
     def total(self):
-        days = (self.end_date - self.start_date).days
-        price = self.items.first().car.price
-        return days*price
-
+        if self.start_date and self.end_date and self.car:
+            days = (self.end_date - self.start_date).days + 1
+            price = self.car.price
+            return days*price
+        return 0
+    
     def __str__(self):
         return f"Reservation {self.id}"
 
-
-class ReservationItem(models.Model):
-    reservation = models.ForeignKey(
-        Reservation, related_name="items", on_delete=models.CASCADE
-    )
-    car = models.ForeignKey(
-        Car, related_name="reservation_cars", on_delete=models.CASCADE
-    )
-    price = models.FloatField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-class CarReview(models.Model):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    rate = models.PositiveIntegerField(
-        validators=[MaxValueValidator(5, "Can't rate car with more than 5 starts")]
-    )
-    comment = models.TextField()
-
-    class Meta:
-        unique_together = ["user", "car"]
 
 
 class Blog(models.Model):

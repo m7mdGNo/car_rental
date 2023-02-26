@@ -4,22 +4,27 @@ from .models import Reservation,ContactUs
 
         
 class ReservationForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=100 ,required=True)
+    last_name = forms.CharField(max_length=100 ,required=True)
+    phone_number = forms.CharField(max_length=100 ,required=True)
     country = forms.CharField(max_length=100 ,required=True)
+    address = forms.CharField(max_length=100 ,required=True)
+    postcode = forms.CharField(max_length=100 ,required=True)
     city = forms.CharField(max_length=100 ,required=True)
     email = forms.CharField(max_length=100 ,required=True)
-    pick_up_location = forms.CharField(max_length=100 ,required=True)
-    start_date = forms.DateField(required=True)
-    end_date = forms.DateField(required=True)
+
 
     class Meta:
         model = Reservation
         fields = (
+            "first_name",
+            "last_name",
+            "phone_number",
             "country",
+            "address",
+            "postcode",
             "city",
             "email",
-            "start_date",
-            "end_date",
-            "pick_up_location",
         )
         
         

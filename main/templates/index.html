@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a href="{% url 'home'%}" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="{% url 'cars'%}" class="nav-link">Cars</a></li>
+            <li class="nav-item">
             <li class="nav-item"><a href="{% url 'blog'%}" class="nav-link">Blog</a></li>
             <li class="nav-item"><a href="{% url 'about'%}" class="nav-link">About</a></li>
             <li class="nav-item"><a href="{% url 'contact_us'%}" class="nav-link">Contact</a></li>
@@ -20,7 +20,7 @@
 
               <li class="nav-item">
                   <a href="#" class="nav-link">
-                      <i class="fas fa-shopping-cart"></i>
+                      
                   </a>
               </li>
               <li class="nav-item">
@@ -55,61 +55,36 @@
     		<div class="row no-gutters">
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
-	  					<div class="col-md-4 d-flex align-items-center">
-
-	  						<form id="filter_form" action="{% url 'cars' %}" method='get' class="request-form ftco-animate bg-primary">
-		          		<h2>Make your trip</h2>
-			    				<div class="form-group">
-			    					<label for="" class="label">Pick-up location</label>
-			    					<input name='pick_up_location' type="text" class="form-control" placeholder="City, Airport, Station, etc">
-			    				</div>
-			    				<div class="d-flex">
-			    					<div class="form-group mr-2">
-			                <label for="" class="label">Pick-up date</label>
-			                <input name='start_date' type="date" class="form-control" placeholder="Date">
-			              </div>
-			              <div class="form-group ml-2">
-			                <label for="" class="label">Drop-off date</label>
-			                <input name='end_date' type="date" class="form-control" placeholder="Date">
-			              </div>
-		              </div>
-			            <div class="form-group">
-			              <input type="submit" value="Rent A Car Now" class="btn btn-secondary py-3 px-4">
-			            </div>
-			    			</form>
-
+	  					<div class="col-md-2 d-flex align-items-center">
 	  					</div>
 	  					<div class="col-md-8 d-flex align-items-center">
-	  						<div class="services-wrap rounded-right w-100">
-	  							<h3 class="heading-section mb-4">Better Way to Rent Your Perfect Cars</h3>
-	  							<div class="row d-flex mb-4">
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Choose Your Pickup Location</h3>
-				                </div>
-					            </div>      
-					          </div>
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Select the Best Deal</h3>
-					              </div>
-					            </div>      
-					          </div>
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Reserve Your Rental Car</h3>
-					              </div>
-					            </div>      
-					          </div>
-					        </div>
-					        <p><a href="{% url 'cars' %}" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</a></p>
-	  						</div>
+                <form id="filter_form" action="{% url 'cars' %}" method='get'>
+                  <div class="services-wrap rounded-right w-100">
+                    <h3 class="heading-section mb-4">Better Way to Rent Your Perfect Cars</h3>
+                    <div class="row d-flex mb-4">
+                      <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                        <div class="form-group">
+                          <label for="" class="label">Pick-up location</label>
+                          <input name='pick_up_location' type="text" class="form-control" placeholder="City, Airport, Station, etc" required>
+                        </div>      
+                      </div>
+                      <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                        <div class="form-group">
+                          <label for="" class="label">Pick-up date</label>
+                          <input name='start_date' type="date" class="form-control" placeholder="Date" min="{{ today }}" required>
+                        </div>      
+                      </div>
+                      <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                        <div class="form-group">
+                          <label for="" class="label">Drop-off date</label>
+                          <input name='end_date' type="date" class="form-control" placeholder="Date" min="{{ tomorrow }}" disabled required>
+                        </div>      
+                      </div>
+                    </div>
+                    <p><button type="submit" class="btn btn-primary py-3 px-4">Reserve Your Perfect Car</button></p>
+                  </div>
+                </form> 
+                
 	  					</div>
 	  				</div>
 				</div>
@@ -117,40 +92,7 @@
     </section>
 
 
-    <section class="ftco-section ftco-no-pt bg-light">
-    	<div class="container">
-    		<div class="row justify-content-center">
-          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-          	<span class="subheading">What we offer</span>
-            <h2 class="mb-2">Feeatured Vehicles</h2>
-          </div>
-        </div>
-    		<div class="row">
-    			<div class="col-md-12">
-    				<div class="carousel-car owl-carousel">
 
-              {% for car in featuerd_cars %}
-                <div class="item">
-                  <div class="car-wrap rounded ftco-animate">
-                    <div class="img rounded d-flex align-items-end" style="background-image: url({{car.images.first.img.url}});">
-                    </div>
-                    <div class="text">
-                      <h2 class="mb-0"><a href="#">{{car.brand_model.brand.name}} {{car.brand_model.name}} {{car.brand_model.year|date:"Y"}}</a></h2>
-                      <div class="d-flex mb-3">
-                        <span class="cat">{{car.brand_model.brand.name}}</span>
-                        <p class="price ml-auto">${{car.price}} <span>/day</span></p>
-                      </div>
-                      <p class="d-flex mb-0 d-block"><a  href="{% url 'reservation_form' %}" onclick="add_to_cart({{car.id}})" class="btn btn-primary py-2 mr-1">Book now</a> <a href="{{ car.get_absolute_url }}" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
 
     <section class="ftco-section ftco-about">
 			<div class="container">
@@ -276,6 +218,52 @@
       });
       };
     </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get the start date input field
+        var startDateInput = document.getElementsByName('start_date')[0];
+        
+        // Get the end date input field
+        var endDateInput = document.getElementsByName('end_date')[0];
+    
+        // Set the minimum value for the start date input field to tomorrow's date
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        startDateInput.min = tomorrow.toISOString().split('T')[0];
+    
+        // Add an event listener to the start date input field to update the minimum and maximum values for the end date input field
+        startDateInput.addEventListener('input', function() {
+          // Set the minimum value for the end date input field to the selected start date
+          endDateInput.min = startDateInput.value;
+          
+          // Disable the end date input field if no start date is selected
+          if (startDateInput.value === '') {
+            endDateInput.disabled = true;
+          } else {
+            endDateInput.disabled = false;
+          }
+        });
+        
+        // Add an event listener to the end date input field to update the maximum value based on the selected start date
+        endDateInput.addEventListener('input', function() {
+          // Set the maximum value for the end date input field to 365 days after the selected start date
+          var maxDate = new Date(startDateInput.value);
+          maxDate.setDate(maxDate.getDate() + 365);
+          endDateInput.max = maxDate.toISOString().split('T')[0];
+        });
+    
+        // Add an event listener to the end date input field to show an error message if no start date is selected
+        endDateInput.addEventListener('click', function() {
+          if (startDateInput.value === '') {
+            alert('Please enter a start date first.');
+            endDateInput.blur();
+          }
+        });
+      });
+    </script>
+    
+
 
 
 {% endblock %}

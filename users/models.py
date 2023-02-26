@@ -44,11 +44,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     image = models.ImageField(default='profile.png')
 
-    cart = models.ManyToManyField(
-        Car, through="CartItem", blank=True, related_name="cart"
-    )
+    cart = models.ForeignKey(Car,on_delete=models.CASCADE,null=True)
+    cart_start_date = models.DateField(null=True,blank=True)
+    cart_end_date = models.DateField(null=True,blank=True)
+    cart_pick_up_location = models.CharField(max_length=150,null=True,blank=True)
 
-    start_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     about = models.TextField(_("about"), max_length=500, blank=True)
 
     is_staff = models.BooleanField(
@@ -89,21 +90,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-class BillingAddress(models.Model):
-    user = models.ForeignKey(
-        User, related_name="billing_adresses", on_delete=models.CASCADE
-    )
-    email = models.EmailField()
-    country = models.CharField(max_length=150)
-    city = models.CharField(max_length=150)
-    phone_number = models.CharField(max_length=20)
-
-
-class CartItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='cart_items')
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ["user", "car"]

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from . import models
-
+from .forms import ReservationForm
 # Register your models here.
 
 
@@ -19,8 +19,8 @@ class Brand_model_imgs_TabularInline(admin.TabularInline):
 
 @admin.register(models.Brand_Model)
 class Brand_model_Admin(admin.ModelAdmin):
-    list_display = ["name", "brand", "transmission", "color", "year", "fuel"]
-    list_filter = ["brand", "name", "transmission", "color", "year", "fuel"]
+    list_display = ["name", "brand", "transmission", "year", "fuel"]
+    list_filter = ["brand", "name", "transmission", "year", "fuel"]
     search_fields = ["name"]
     inlines = [Brand_model_imgs_TabularInline]
 
@@ -31,47 +31,48 @@ class Brand_model_Admin(admin.ModelAdmin):
 class Car_imgs_TabularInline(admin.TabularInline):
     model = models.Car_imgs
     fields = ["img"]
+    
+
+class Car_Review_TabularInline(admin.TabularInline):
+    model = models.CarReview
+    fields = ['user','car','rate','comment']
+    
+    def user(self,obj):
+        return self.request.user
 
 
 @admin.register(models.Car)
 class Car_admin(admin.ModelAdmin):
-    list_display = ["brand_model__name", "owner"]
-    search_fields = ["brand_model__name"]
+    list_display = ["brand_model__name", "color", "owner"]
+    search_fields = ["brand_model__name", "color"]
     list_filter = [
         "owner",
         "brand_model__name",
+        "color",
         "brand_model__year",
-        "brand_model__color",
     ]
+    readonly_fields = ['rate']
 
     def brand_model__name(self, obj):
-        queryset = models.Brand_Model.objects.filter(id=obj.id).get()
+        queryset = models.Brand_Model.objects.get(id=obj.id)
         return queryset.name
 
     def brand_model__year(self, obj):
-        queryset = models.Brand_Model.objects.filter(id=obj.id).get()
+        queryset = models.Brand_Model.objects.get(id=obj.id)
         return queryset.year
 
-    def brand_model__color(self, obj):
-        queryset = models.Brand_Model.objects.filter(id=obj.id).get()
-        return queryset.color
-
-    inlines = [Car_imgs_TabularInline]
-
-
-class ReservationItem_TabularInline(admin.TabularInline):
-    model = models.ReservationItem
-    fields = ["reservation", "car", "price"]
+    inlines = [Car_imgs_TabularInline,Car_Review_TabularInline]
 
 
 @admin.register(models.Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ["id", "email", "status", "start_date", "end_date"]
+    list_display = ["id", "email", "status", "start_date", "end_date","created_at"]
     search_fields = ["id", "email"]
-    list_filter = ["status", "country", "city", "created"]
-    readonly_fields = ['total',]
-
-    inlines = [ReservationItem_TabularInline]
+    list_filter = ["status", "country", "city","created_at"]
+    readonly_fields = [
+        "total",
+        "created_at"
+    ]
 
 
 class BlogReviewTabularInline(admin.TabularInline):
