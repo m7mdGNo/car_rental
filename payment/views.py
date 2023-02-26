@@ -54,7 +54,7 @@ def checkout(request, reservation_id):
         ],
         metadata={"reservation_id": reservation.id},
         mode="payment",
-        success_url=f"{settings.DOMAIN}/",
+        success_url=f"{settings.DOMAIN}",
         cancel_url=f"{settings.DOMAIN}/reservation",
     )
     return redirect(checkout_session.url, code=303)
