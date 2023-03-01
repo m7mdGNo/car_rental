@@ -85,7 +85,7 @@ $ python manage.py runserver
 
 Open the web browser and go to http://localhost:8000.
 
-### create administrators user
+### create administrator user
 ```Copy code
 $ python manage.py createsuperuser
 ```
