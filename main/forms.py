@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reservation,ContactUs
+from .models import Reservation,ContactUs,Car
 
 
         
@@ -45,3 +45,18 @@ class ContactUsForm(forms.ModelForm):
             "message",
 
         )
+        
+        
+        
+class CarsForm(forms.ModelForm):
+    class Meta:
+        model = Car
+        fields = [
+            'brand_model',
+            'plate_number',
+            'description',
+            'mileage',
+            'color',
+            'price',
+            'image',
+        ]

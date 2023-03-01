@@ -69,12 +69,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Unselect this instead of deleting accounts.",
     )
 
-    is_owner = models.BooleanField(
-        "owner status",
-        default=False,
-        help_text="Designates that this user is a car owner.",
-    )
-
     objects = UserManager()
 
     EMAIL_FIELD = "email"
@@ -90,3 +84,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+
+class Company(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    country = models.CharField(max_length=150)
+    governate = models.CharField(max_length=150)
+    city = models.CharField(max_length=150)
+    place = models.CharField(max_length=150)
+    website = models.CharField(max_length=100)
+    about = models.TextField(_("about"), max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(default='profile.png')
+
+    def __str__(self):
+        return self.name

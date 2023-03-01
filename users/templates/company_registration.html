@@ -19,13 +19,13 @@
           </ul>
         <ul class="navbar-nav ml-auto">
           
-          <li class="nav-item">
+          <li class="nav-item active">
             <a href="{% url 'company_profile' %}" class="nav-link">
               <i class="fas fa-building"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'profile' %}" class="nav-link active">
+            <a href="{% url 'profile' %}" class="nav-link">
               <i class="fas fa-user"></i>
             </a>
           </li>
@@ -41,7 +41,7 @@
           <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
                 <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
-              <h1 class="mb-3 bread">Register</h1>
+              <h1 class="mb-3 bread">Company Register</h1>
             </div>
           </div>
         </div>
@@ -54,30 +54,75 @@
               </div>
           {% endif %}
         <div class="row justify-content-center">
-          <h2>Register</h2>
+          <h2>Company Register</h2>
         </div>
         <form method="POST" class="mt-4">
           {% csrf_token %}
           <div class="form-group">
-            <label for="first_name">First name:</label>
-            <input type="text" name="first_name" id="first_name" class="form-control">
-            {% if form.first_name.errors %}
+            <label for="name">Company Name:</label>
+            <input type="text" name="name" id="name" class="form-control">
+            {% if form.name.errors %}
             <div class="alert-danger">
-                {{form.first_name.errors}}
+                {{form.name.errors}}
             </div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="last_name">Last name:</label>
-            <input type="text" name="last_name" id="last_name" class="form-control">
-            {% if form.last_name.errors %}
+            <label for="coutnry">Coutnry:</label>
+            <input type="text" name="coutnry" id="coutnry" class="form-control">
+            {% if form.coutnry.errors %}
             <div class="alert-danger">
-                {{form.last_name.errors}}
+                {{form.coutnry.errors}}
             </div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="email">email:</label>
+            <label for="governate">governate:</label>
+            <input type="text" name="governate" id="governate" class="form-control">
+            {% if form.governate.errors %}
+            <div class="alert-danger">
+                {{form.governate.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" name="city" id="city" class="form-control">
+            {% if form.city.errors %}
+            <div class="alert-danger">
+                {{form.city.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="place">Place:</label>
+            <input type="text" name="place" id="place" class="form-control">
+            {% if form.place.errors %}
+            <div class="alert-danger">
+                {{form.place.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="website">Company Website:</label>
+            <input type="text" name="website" id="website" class="form-control">
+            {% if form.website.errors %}
+            <div class="alert-danger">
+                {{form.website.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="about">About Company:</label>
+            <input type="text" name="about" id="about" class="form-control">
+            {% if form.about.errors %}
+            <div class="alert-danger">
+                {{form.about.errors}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="email">Company email:</label>
             <input type="text" name="email" id="email" class="form-control">
             {% if form.email.errors %}
             <div class="alert-danger">
@@ -108,7 +153,7 @@
               <button type="submit" class="btn btn-primary w-100 mt-4 mb-4">Register</button>
             </div>
             <div class="col-6 text-right mt-4">
-              <label for="account">already have one ?<a href={% url 'login' %}> Login</a></label>
+              <label for="account">already have one ?<a href={% url 'company_login' %}> Login</a></label>
             </div>
           </div>
         </form>

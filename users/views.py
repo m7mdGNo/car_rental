@@ -1,13 +1,16 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views import View, generic
-from .forms import LoginForm, UserCreationForm, UserUpdateForm
+from .forms import LoginForm, UserCreationForm, UserUpdateForm, CompanyForm, CompanyLoginForm, CompanyUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User
+from .models import User,Company
 from django.db.models import Prefetch
 from main.models import Reservation, Car, Car_Brand, Brand_Model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from main.mixins import CompanyRequiredMixin
+from django.urls import reverse
+
 
 
 class LoginView(View):
@@ -66,7 +69,6 @@ class SignUpView(generic.edit.CreateView):
                 user.cart_pick_up_location = session_pick_up_location
                 user.save()
                 return redirect("reservation_form")
-
             return redirect("home")
 
         return super().form_valid(form)
@@ -116,5 +118,61 @@ def ProfileUpdate(request):
         if form.is_valid():
             form.save()
             return redirect("profile")
-        return HttpResponse(status=500)
     return HttpResponse(status=500)
+
+
+
+class CompanyRegistrationView(generic.CreateView):
+    form_class = CompanyForm
+    template_name = 'company_registration.html'
+    
+
+
+class CompanyLoginView(View):
+    template_name = 'company_login.html'
+    form_class = CompanyLoginForm
+    model = Company
+    
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {"form": form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            user = authenticate(self.request, email=email, password=password)
+            if user is not None:
+                login(self.request, user)
+                return redirect("company_profile")
+            form.add_error(None, "Invalid email or password")
+            
+        return render(request, self.template_name, {"form": form})
+    
+    
+
+# @login_required(login_url="company_login")
+def CompanyProfileUpdate(request):
+    if request.method == "POST":
+        company = Company.objects.get(user=request.user)
+        form = CompanyUpdateForm(request.POST, request.FILES, instance=company)
+        if form.is_valid():
+            form.save()
+            return redirect("company_profile")
+    return HttpResponse(status=500)
+
+
+
+class CompanyProfileView(CompanyRequiredMixin,generic.TemplateView):
+    template_name = 'company_profile.html'
+    
+    
+    def get_queryset(self):
+        qs = Company.objects.filter(user=self.request.user).prefetch_related(Prefetch('user',User.objects.prefetch_related(Prefetch('reservations',Reservation.objects.prefetch_related(Prefetch('car',Car.objects.prefetch_related(Prefetch('brand_model',Brand_Model.objects.prefetch_related(Prefetch('brand',Car_Brand.objects.all()))))))))))
+        return qs
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['company'] = self.get_queryset().get()
+        return ctx

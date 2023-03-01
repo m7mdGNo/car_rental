@@ -56,7 +56,7 @@ class Brand_model_imgs(models.Model):
 
 
 class Car(models.Model):
-    owner = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    company = models.ForeignKey("users.Company", on_delete=models.CASCADE,related_name='cars')
     brand_model = models.ForeignKey(Brand_Model, on_delete=models.CASCADE)
     plate_number = models.CharField(max_length=12)
     description = models.TextField(max_length=1000)
@@ -65,8 +65,12 @@ class Car(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()
     accepted = models.BooleanField(default=False)
+    visits = models.IntegerField(default=0)
+    image = models.ImageField(default="placeholder.png")
 
     def get_absolute_url(self):
+        self.visits +=1
+        self.save()
         return reverse("single_car", args=[self.id])
     
     @property
@@ -90,10 +94,6 @@ class CarReview(models.Model):
     class Meta:
         unique_together = ["user", "car"]
 
-
-class Car_imgs(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="images")
-    img = models.ImageField(default="placeholder.png")
 
 
 class Reservation(models.Model):
@@ -181,3 +181,6 @@ class ContactUs(models.Model):
     
     def __str__(self) -> str:
         return self.name
+    
+    
+    

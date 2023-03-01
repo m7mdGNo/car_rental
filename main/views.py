@@ -5,24 +5,16 @@ from django.db.models import Q, F, Sum, Avg, Count, Max, Prefetch
 from django.core.paginator import Paginator
 from .filters import AvailableCarsFilter
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ReservationForm, ContactUsForm
+from .forms import ReservationForm, ContactUsForm, CarsForm
 from django.urls import reverse
 import stripe
+from users.models import Company
+from .mixins import CompanyRequiredMixin
 
 
 # Create your views here.
 class HomeTemplateView(generic.TemplateView):
     template_name = "index.html"
-
-    def get_car_queryset(self):
-        return (
-            Car.objects.all()
-            .prefetch_related(
-                Prefetch("brand_model", Brand_Model.objects.prefetch_related("brand"))
-            )
-            .prefetch_related("images")
-            .filter(accepted=True)[:8]
-        )
 
     def get_blog_queryset(self):
         return (
@@ -34,7 +26,6 @@ class HomeTemplateView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["featuerd_cars"] = self.get_car_queryset()
         ctx["blogs"] = self.get_blog_queryset()
         return ctx
 
@@ -45,22 +36,16 @@ class CarsListView(generic.ListView):
     queryset = (
         Car.objects.prefetch_related(
             Prefetch("brand_model", Brand_Model.objects.prefetch_related("brand"))
-        )
-        .prefetch_related("images")
-        .order_by("added_at")
+        ).order_by("added_at")
     ).filter(accepted=True)
 
-    def get_paginate_by(self, queryset):
-        return self.request.GET.get("paginate_by", 12)
+    # def get_paginate_by(self, queryset):
+    #     return self.request.GET.get("paginate_by", 12)
 
     context_object_name = "featured_cars"
 
-    # filter_class = AvailableCarsFilter
-
     def get_queryset(self):
         queryset = super().get_queryset()
-        # self.filter = self.filter_class(self.request.GET, queryset=queryset)
-        # return self.filter.qs
         start_date = self.request.GET.get("start_date")
         end_date = self.request.GET.get("end_date")
         if start_date and end_date:
@@ -91,13 +76,14 @@ class BlogListView(generic.ListView):
         return ctx
 
 
+class BlogSingleView(generic.TemplateView):
+    template_name = 'blog-single.html'
+
 class SingleCarView(generic.DetailView):
     template_name = "car-single.html"
     queryset = (
-        (
-            Car.objects.prefetch_related(
-                Prefetch("brand_model", Brand_Model.objects.prefetch_related("brand"))
-            ).prefetch_related("images")
+        Car.objects.prefetch_related(
+            Prefetch("brand_model", Brand_Model.objects.prefetch_related("brand"))
         )
         .prefetch_related("reviews")
         .filter(accepted=True)
@@ -113,6 +99,54 @@ class SingleCarView(generic.DetailView):
         return ctx
 
 
+class CarDeleteView(CompanyRequiredMixin,generic.DeleteView):
+    model = Car
+
+    def get_success_url(self):
+        return reverse("company_profile")
+
+    def get(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+
+class CarUpdateView(CompanyRequiredMixin,generic.UpdateView):
+    model = Car
+    form_class = CarsForm
+    template_name = "update_car.html"
+    context_object_name = "car"
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['brand_models'] = Brand_Model.objects.all()
+        return ctx
+
+    def get_success_url(self):
+        return reverse("company_profile")
+
+    def form_valid(self, form):
+        form.instance.company = Company.objects.get(user=self.request.user)
+        return super().form_valid(form)
+
+
+class CarCreateView(CompanyRequiredMixin,generic.CreateView):
+    model = Car
+    form_class = CarsForm
+    template_name = "add_car.html"
+    context_object_name = "car"
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['brand_models'] = Brand_Model.objects.all()
+        return ctx
+
+    def get_success_url(self):
+        return reverse("company_profile")
+
+    def form_valid(self, form):
+        form.instance.company = Company.objects.get(user=self.request.user)
+        return super().form_valid(form)
+
+
 class AboutTemplateView(generic.TemplateView):
     template_name = "about.html"
 
@@ -125,19 +159,13 @@ class ReservationView(LoginRequiredMixin, generic.CreateView):
     form_class = ReservationForm
 
     def form_valid(self, form):
-        print('dsafasdfds')
         user = self.request.user
         form.instance.user = user
         form.instance.car = user.cart
         form.instance.start_date = user.cart_start_date
         form.instance.end_date = user.cart_end_date
         form.instance.pick_up_location = user.cart_pick_up_location
-        
         self.reservation = form.save()
-        
-        # self.reservation.car = car
-        # self.reservation.save()
-        # return super().form_valid(form)
         return redirect(
             reverse("checkout", kwargs={"reservation_id": self.reservation.id})
         )
@@ -166,13 +194,13 @@ class AddCarToCart(View):
         request.session["pick_up_location"] = pick_up_location
         request.session.modified = True
 
-        print('added')
+        print("added")
         return redirect("reservation_form")
 
 
 def DeleteReservation(request, id):
     if request.method == "GET":
-        reservation = Reservation.objects.filter(id=id).get()
+        reservation = Reservation.objects.get(id=id)
         if reservation.status == "paid":
             reservation.status = "pernding_refund"
             reservation.save()

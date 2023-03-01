@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import UserCreationForm, UserEditForm
-from .models import User
+from .models import User,Company
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
@@ -47,6 +47,22 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('name','phone','email','image','created_at')
+    list_filter = ['name','created_at']
+    search_fields = ('name','phone','email','image','created_at')
+    readonly_fields = ('created_at',)
+    
+    def phone(self,obj):
+        return obj.user.phone
+
+    def email(self,obj):
+        return obj.user.email
+
+    def image(self,obj):
+        return obj.user.image
 
 
 admin.site.register(User, CustomUserAdmin)

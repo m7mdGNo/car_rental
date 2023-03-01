@@ -19,16 +19,16 @@
           </ul>
         <ul class="navbar-nav ml-auto">
           
-          <li class="nav-item">
-            <a href="{% url 'company_profile' %}" class="nav-link">
-              <i class="fas fa-building"></i>
-            </a>
-          </li>
-          <li class="nav-item active">
-            <a href="{% url 'profile' %}" class="nav-link active">
-              <i class="fas fa-user"></i>
-            </a>
-          </li>
+            <li class="nav-item active">
+                <a href="{% url 'company_profile' %}" class="nav-link">
+                  <i class="fas fa-building"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'profile' %}" class="nav-link">
+                  <i class="fas fa-user"></i>
+                </a>
+              </li>
         </ul>
         </div>
       </div>
@@ -41,8 +41,8 @@
         <div class="container">
           <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Profile <i class="ion-ios-arrow-forward"></i></span></p>
-              <h1 class="mb-3 bread">Profile</h1>
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Update Car <i class="ion-ios-arrow-forward"></i></span></p>
+              <h1 class="mb-3 bread">Update Car</h1>
             </div>
           </div>
         </div>
@@ -80,76 +80,51 @@
           <section class=" p-4 mb-4 shadow-lg">
             <div class="row">
               <div class="col-md-4">
-                <form method="post" action="{% url 'profile_update' %}" enctype="multipart/form-data">
+                <form method="post" action="{% url 'update_car' car.pk %}" enctype="multipart/form-data">
                 <div class="profile-image-wrapper">
-                    <img id="profile-image" src="{{ user.image.url }}" class="img-fluid rounded-circle mb-2" alt="Profile Image" style="height: 350px; width: 350px; object-fit: cover;" >
+                    <img id="profile-image" src="{{ car.image.url }}" class="img-fluid mb-2" alt="Profile Image" style="height: 350px; width: 350px; object-fit: cover;" >
                     <i class="fas fa-edit edit-icon text-white"></i>
                     <input type="file" id="image-input" accept="image/*" style="display:none" name='image'>
                   </div>
               </div>
-              <div class="col-md-8">
-                <h2>Profile Information</h2>
-                
+              <div class="col-md-8">                
                   {% csrf_token %}
                   <div class="form-group">
-                    <label for="id_first_name">First Name:</label>
-                    <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ user.first_name }}">
+                    <label for="id_brand_model">brand_model:</label>
+                    <select class="form-control" id="id_brand_model" name="brand_model">
+                        {% for brand_model in brand_models %}
+                            <option value="{{ brand_model.pk }}" {% if brand_model.pk == car.brand_model.pk %} selected {% endif %}>
+                                {{ brand_model.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                  <div class="form-group">
+                    <label for="id_plate_number">Plate Number:</label>
+                    <input type="text" class="form-control" id="id_plate_number" name="plate_number" value="{{ car.plate_number }}">
                   </div>
                   <div class="form-group">
-                    <label for="id_last_name">Last Name:</label>
-                    <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ user.last_name }}">
+                    <label for="id_description">Description:</label>
+                    <input type="text" class="form-control" id="id_description" name="description" value="{{ car.description }}">
                   </div>
                   <div class="form-group">
-                    <label for="id_email">Email:</label>
-                    <input type="email" class="form-control" id="id_email" name="email" value="{{ user.email }}">
+                    <label for="id_mileage">Mileage:</label>
+                    <input type="text" class="form-control" id="id_mileage" name="mileage" value="{{ car.mileage }}">
                   </div>
-                  <button type="submit" class="btn btn-lg  btn-primary mt-2 ">Update Information</button>
+                  <div class="form-group">
+                    <label for="id_color">Color:</label>
+                    <input type="text" class="form-control" id="id_color" name="color" value="{{ car.color }}">
+                  </div>
+                  <div class="form-group">
+                    <label for="id_price">Price:</label>
+                    <input type="text" class="form-control" id="id_price" name="price" value="{{ car.price }}">
+                  </div>
+                  <button type="submit" class="btn btn-lg  btn-primary mt-2 ">Update</button>
                 </form>
               </div>
             </div>
           
-            <hr>
-          
-            <h2 class="text-center mt-2 mb-4">Reservations History</h2>
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th class="text-center">Order ID</th>
-                    <th class="text-center">Product Name</th>
-                    <th class="text-center">Start Date</th>
-                    <th class="text-center">End Date</th>
-                    <th class="text-center">Pick Up Location</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Total<th/>
-                    <th class="text-center">Actions<th/>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for reservation in reservations %}
-                  <tr>
-                    <td class="text-center">{{ reservation.id }}</td>
-                    <td class="text-center">{{ reservation.car.brand_model.brand.name }} {{ reservation.car.brand_model.name }} {{ reservation.car.brand_model.year|date:"Y" }}</td>
-                    <td class="text-center">{{ reservation.start_date }}</td>
-                    <td class="text-center">{{ reservation.end_date }}</td>
-                    <td class="text-center">{{ reservation.pick_up_location }}</td>
-                    <td class="text-center">{{ reservation.status }}</td>
-                    <td class="text-center">{{ reservation.total }} $</td>
-                    <td class="text-center"></td>
-                    {% if reservation.status == 'paid' %}
-                    <td class="text-center"><a href="{% url 'delete_reservation' reservation.id %}" class="btn btn-sm btn-danger">Delete</a></td>
-                    {% else %}
-                    <td class="text-center"><a href="#" class="btn btn-sm btn-danger disabled pointer-events-none">Delete</a></td>
-                    {% endif %}
-                  </tr>
-                  {% empty %}
-                  <tr>
-                    <td colspan="6" class="text-center">No orders found.</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
             
           </section>
       </div>

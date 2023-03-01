@@ -41,10 +41,10 @@
 			<ul class="navbar-nav ml-auto">
 				
 				<li class="nav-item">
-					<a href="#" class="nav-link">
-						
+					<a href="{% url 'company_profile' %}" class="nav-link">
+					  <i class="fas fa-building"></i>
 					</a>
-				</li>
+				  </li>
 				<li class="nav-item">
 					<a href="{% url 'profile' %}" class="nav-link">
 						<i class="fas fa-user"></i>
@@ -112,7 +112,7 @@
 				{% for car in featured_cars %}
 				<div class="col-md-4 mt-4">
 					<div class="car-wrap rounded ftco-animate">
-						<div class="img rounded d-flex align-items-end" style="background-image: url({{car.images.first.img.url}});">
+						<div class="img rounded d-flex align-items-end" style="background-image: url({{car.image.url}});">
 							<!-- Add the new div element for the star icon -->
 
 							{% if car.reviews.exists %}

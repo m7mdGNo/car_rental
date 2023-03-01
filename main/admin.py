@@ -28,11 +28,6 @@ class Brand_model_Admin(admin.ModelAdmin):
         return obj.brand.name
 
 
-class Car_imgs_TabularInline(admin.TabularInline):
-    model = models.Car_imgs
-    fields = ["img"]
-    
-
 class Car_Review_TabularInline(admin.TabularInline):
     model = models.CarReview
     fields = ['user','car','rate','comment']
@@ -43,25 +38,22 @@ class Car_Review_TabularInline(admin.TabularInline):
 
 @admin.register(models.Car)
 class Car_admin(admin.ModelAdmin):
-    list_display = ["brand_model__name", "color", "owner"]
+    list_display = ["brand_model__name", "color", "company"]
     search_fields = ["brand_model__name", "color"]
     list_filter = [
-        "owner",
-        "brand_model__name",
+        "company",
         "color",
         "brand_model__year",
     ]
     readonly_fields = ['rate']
 
     def brand_model__name(self, obj):
-        queryset = models.Brand_Model.objects.get(id=obj.id)
-        return queryset.name
+        return obj.brand_model.name
 
     def brand_model__year(self, obj):
-        queryset = models.Brand_Model.objects.get(id=obj.id)
-        return queryset.year
+        return obj.brand_model.year
 
-    inlines = [Car_imgs_TabularInline,Car_Review_TabularInline]
+    inlines = [Car_Review_TabularInline]
 
 
 @admin.register(models.Reservation)

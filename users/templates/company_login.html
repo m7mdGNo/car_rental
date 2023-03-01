@@ -19,12 +19,12 @@
           </ul>
         <ul class="navbar-nav ml-auto">
           
-          <li class="nav-item">
+          <li class="nav-item active">
             <a href="{% url 'company_profile' %}" class="nav-link">
               <i class="fas fa-building"></i>
             </a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a href="{% url 'profile' %}" class="nav-link">
               <i class="fas fa-user"></i>
             </a>
@@ -41,7 +41,7 @@
           <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
                 <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
-              <h1 class="mb-3 bread">Reservation</h1>
+              <h1 class="mb-3 bread">Company Login</h1>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
         <form method="POST" class="mt-4">
           {% csrf_token %}
           <div class="form-group">
-            <label for="email" class="mt-3">Email:</label>
+            <label for="email" class="mt-3">Company Email:</label>
             <input type="text" name="email" id="email" class="form-control">
             {% if form.email.errors %}
             <div class="alert-danger">
@@ -81,7 +81,7 @@
               <button type="submit" class="btn btn-primary w-100 mt-4 mb-4">Login</button>
             </div>
             <div class="col-6 text-right mt-4">
-              <label for="account">don't have one ?<a href={% url 'register' %}> Register Now</a></label>
+              <label for="account">don't have one ?<a href={% url 'company_register' %}> Register Now</a></label>
             </div>
           </div>
         </form>
