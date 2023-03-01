@@ -46,15 +46,8 @@ $ pip install -r requirements.txt
 ### create postgres database
 ```bash
 $ sudo apt-get install python3-dev libpq-dev postgresql postgresql-contrib
-```
-
-```bash
 $ sudo su - postgres
-```
-```bash
 $ psql
-```
-```bash
 $ create database <database_name>;
 $ create role <name> with encrypted password <'password'>;
 $ alter role <name> with LOGIN;
