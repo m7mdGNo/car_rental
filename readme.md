@@ -25,27 +25,45 @@ https://carbook.m7mdgno.me/
 Clone the repository:
 
 ```bash
-git clone https://github.com/exampleuser/car-rental-app.git
-cd car-rental-app
+$ git clone https://github.com/m7mdGNo/car_rental.git
+$ cd car_rental
 ```
 
 
 ### Create a virtual environment and activate it:
 
 ```bash
-python3 -m venv env
-source env/bin/activate
+$ python3 -m venv env
+$ source env/bin/activate
 ```
 
 ### Install the dependencies:
 
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
+```
+
+### create postgres database
+```bash
+$ sudo apt-get install python3-dev libpq-dev postgresql postgresql-contrib
+```
+
+```bash
+$ sudo su - postgres
+```
+```bash
+$ psql
+```
+```bash
+$ create database <database_name>;
+$ create role <name> with encrypted password <'password'>;
+$ alter role <name> with LOGIN;
+$ grant all on DATABASE <db_name> to <role_name>;
 ```
 
 ### Create a .env file in the root directory with the following environment variables:
 
-see .env.example and replace these values with real values
+see .env.example in the root directory and replace these values with real values
 ```makefile
 SECRET_KEY=secret-key
 DEBUG=True
@@ -63,20 +81,20 @@ STRIPE_ENDPOINT_SECRET=fff
 ### Run the migrations:
 
 ```Copy code
-python manage.py migrate
+$ python manage.py migrate
 ```
 
 ### Run the development server:
 
 ```Copy code
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 Open the web browser and go to http://localhost:8000.
 
 ### create administrators user
 ```Copy code
-python manage.py createsuperuser
+$ python manage.py createsuperuser
 ```
 
 Open the web browser and go to http://localhost:8000/admin.
