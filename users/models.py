@@ -9,6 +9,11 @@ from main.models import Car
 
 
 class UserManager(BaseUserManager):
+    """
+    this class is responsible for creating and managing User instances.
+    It includes methods to create regular users and superusers.
+    """
+
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -36,18 +41,23 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    """
+    Represents a user instance with custom fields.
+    """
+
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     email = models.EmailField(_("email address"), unique=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     temp_password = models.CharField(max_length=100, null=True, blank=True)
-    
-    image = models.ImageField(default='profile.png')
 
-    cart = models.ForeignKey(Car,on_delete=models.CASCADE,null=True)
-    cart_start_date = models.DateField(null=True,blank=True)
-    cart_end_date = models.DateField(null=True,blank=True)
-    cart_pick_up_location = models.CharField(max_length=150,null=True,blank=True)
+    image = models.ImageField(default="profile.png")
+
+    cart = models.ForeignKey(Car, on_delete=models.CASCADE, null=True)
+    cart_start_date = models.DateField(null=True, blank=True)
+    cart_end_date = models.DateField(null=True, blank=True)
+    cart_pick_up_location = models.CharField(max_length=150, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     about = models.TextField(_("about"), max_length=500, blank=True)
@@ -86,8 +96,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
 class Company(models.Model):
+    """
+    Represents a company instance
+    """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     country = models.CharField(max_length=150)
@@ -97,7 +110,7 @@ class Company(models.Model):
     website = models.CharField(max_length=100)
     about = models.TextField(_("about"), max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(default='profile.png')
+    image = models.ImageField(default="profile.png")
 
     def __str__(self):
         return self.name

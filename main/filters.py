@@ -1,5 +1,5 @@
 import django_filters
-from .models import Car,Reservation
+from .models import Car, Reservation
 from django.utils import timezone
 from django.db.models import Q
 
@@ -11,8 +11,7 @@ class AvailableCarsFilter(django_filters.FilterSet):
     end_date = django_filters.DateFilter(
         method="filter_by_end_date",
     )
-    
-    
+
     def filter_by_start_date(self, queryset, name, value):
         start_datetime = value
         return queryset.exclude(

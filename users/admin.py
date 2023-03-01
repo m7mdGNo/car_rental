@@ -1,13 +1,16 @@
 from django.contrib import admin
 from .forms import UserCreationForm, UserEditForm
-from .models import User,Company
+from .models import User, Company
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
 
-
-
 class CustomUserAdmin(UserAdmin):
+    """
+    Admin class for the user model to be used in the Django Admin Panel,
+    with custom fieldsets
+    """
+
     form = UserEditForm
     add_form = UserCreationForm
     ordering = (
@@ -21,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name","image")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "image")}),
         (
             _("Permissions"),
             {
@@ -29,7 +32,17 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
         (_("Important dates"), {"fields": ("last_login", "created_at")}),
-        (_("cart car"), {"fields": ("cart", "cart_start_date","cart_end_date","cart_pick_up_location")}),
+        (
+            _("cart car"),
+            {
+                "fields": (
+                    "cart",
+                    "cart_start_date",
+                    "cart_end_date",
+                    "cart_pick_up_location",
+                )
+            },
+        ),
     )
 
     add_fieldsets = (
@@ -48,20 +61,25 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
+
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name','phone','email','image','created_at')
-    list_filter = ['name','created_at']
-    search_fields = ('name','phone','email','image','created_at')
-    readonly_fields = ('created_at',)
-    
-    def phone(self,obj):
+    """
+    Admin class for the company model to be used in the Django Admin Panel
+    """
+
+    list_display = ("name", "phone", "email", "image", "created_at")
+    list_filter = ["name", "created_at"]
+    search_fields = ("name", "phone", "email", "image", "created_at")
+    readonly_fields = ("created_at",)
+
+    def phone(self, obj):
         return obj.user.phone
 
-    def email(self,obj):
+    def email(self, obj):
         return obj.user.email
 
-    def image(self,obj):
+    def image(self, obj):
         return obj.user.image
 
 

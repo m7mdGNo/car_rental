@@ -14,16 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# endpoint = stripe.WebhookEndpoint.create(
-#   url='http://44.204.126.208/payment/webhooks/stripe/',
-#   enabled_events=[
-#     'charge.failed',
-#     'charge.succeeded',
-#   ],
-# )
-
 
 def checkout(request, reservation_id):
+    """
+    Define a view to process the checkout using Stripe
+    """
     reservation = Reservation.objects.prefetch_related(
         Prefetch(
             "car",
@@ -62,6 +57,10 @@ def checkout(request, reservation_id):
 
 @csrf_exempt
 def stripe_webhook(request):
+    """
+    Define a view to handle the Stripe webhook.
+    and update reservation status.
+    """
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
     event = None

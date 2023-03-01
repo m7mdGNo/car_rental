@@ -1,10 +1,14 @@
 from django.db import models
-from django.db.models import Sum, Count, F,Avg
+from django.db.models import Sum, Count, F, Avg
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
 
 
 class Car_Brand(models.Model):
+    """
+    Represents a car brand
+    """
+
     name = models.CharField(max_length=150)
     img = models.ImageField(default="placeholder.png")
 
@@ -13,12 +17,15 @@ class Car_Brand(models.Model):
 
 
 class Brand_Model(models.Model):
+    """
+    Represents a car model associated with a brand
+    """
+
     brand = models.ForeignKey(
         Car_Brand, on_delete=models.CASCADE, related_name="models"
     )
     name = models.CharField(max_length=150)
     year = models.CharField(max_length=4)
-
 
     class TransmissionChoices(models.TextChoices):
         MANUAL = "manual", "Manual"
@@ -49,6 +56,10 @@ class Brand_Model(models.Model):
 
 
 class Brand_model_imgs(models.Model):
+    """
+    Represents images of a car model
+    """
+
     brand_model = models.ForeignKey(
         Brand_Model, on_delete=models.CASCADE, related_name="imgs"
     )
@@ -56,7 +67,13 @@ class Brand_model_imgs(models.Model):
 
 
 class Car(models.Model):
-    company = models.ForeignKey("users.Company", on_delete=models.CASCADE,related_name='cars')
+    """
+    Represents a car instance
+    """
+
+    company = models.ForeignKey(
+        "users.Company", on_delete=models.CASCADE, related_name="cars"
+    )
     brand_model = models.ForeignKey(Brand_Model, on_delete=models.CASCADE)
     plate_number = models.CharField(max_length=12)
     description = models.TextField(max_length=1000)
@@ -68,23 +85,28 @@ class Car(models.Model):
     visits = models.IntegerField(default=0)
     image = models.ImageField(default="placeholder.png")
 
+    # Returns the URL for a single car
     def get_absolute_url(self):
-        self.visits +=1
+        self.visits += 1
         self.save()
         return reverse("single_car", args=[self.id])
-    
+
+    # Returns the average rating for a car
     @property
     def rate(self):
-        return self.reviews.aggregate(Avg("rate"))['rate__avg']
+        return self.reviews.aggregate(Avg("rate"))["rate__avg"]
 
     def __str__(self) -> str:
         return f"{self.brand_model.brand.name}|{self.brand_model.name}"
 
-    
 
 class CarReview(models.Model):
+    """
+    Represents a review for a car
+    """
+
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE,related_name='reviews')
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="reviews")
     rate = models.PositiveIntegerField(
         validators=[MaxValueValidator(5, "Can't rate car with more than 5 starts")]
     )
@@ -95,10 +117,15 @@ class CarReview(models.Model):
         unique_together = ["user", "car"]
 
 
-
 class Reservation(models.Model):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE,related_name='reservations')
-    car = models.ForeignKey(Car,on_delete=models.CASCADE,related_name='reservations')
+    """
+    Represents a car reservation
+    """
+
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="reservations"
+    )
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="reservations")
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=150)
@@ -137,15 +164,18 @@ class Reservation(models.Model):
         if self.start_date and self.end_date and self.car:
             days = (self.end_date - self.start_date).days + 1
             price = self.car.price
-            return days*price
+            return days * price
         return 0
-    
+
     def __str__(self):
         return f"Reservation {self.id}"
 
 
-
 class Blog(models.Model):
+    """
+    Represents a Blog
+    """
+
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     describtion = models.TextField(max_length=1000)
@@ -163,6 +193,10 @@ class Blog(models.Model):
 
 
 class BlogReview(models.Model):
+    """
+    Represents a reviews for a blog
+    """
+
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="reviews")
     comment = models.TextField()
@@ -171,16 +205,15 @@ class BlogReview(models.Model):
         unique_together = ["user", "blog"]
 
 
-
-
 class ContactUs(models.Model):
+    """
+    Represents a contactus
+    """
+
     name = models.CharField(max_length=100)
     email = models.EmailField()
     subject = models.CharField(max_length=100)
     message = models.TextField(max_length=1000)
-    
+
     def __str__(self) -> str:
         return self.name
-    
-    
-    

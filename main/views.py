@@ -10,10 +10,15 @@ from django.urls import reverse
 import stripe
 from users.models import Company
 from .mixins import CompanyRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 class HomeTemplateView(generic.TemplateView):
+    """
+    Displays the home page of the application, including a list of featured blog posts.
+    """
+
     template_name = "index.html"
 
     def get_blog_queryset(self):
@@ -31,6 +36,12 @@ class HomeTemplateView(generic.TemplateView):
 
 
 class CarsListView(generic.ListView):
+    """
+    Displays a list of available cars that users can reserve.
+    Users can filter the list by start and end dates,
+    and the view uses prefetch_related to optimize the database queries.
+    """
+
     template_name = "car.html"
 
     queryset = (
@@ -62,6 +73,10 @@ class CarsListView(generic.ListView):
 
 
 class BlogListView(generic.ListView):
+    """
+    Displays a list of blog posts and allows users to paginate through them.
+    """
+
     template_name = "blog.html"
     queryset = Blog.objects.prefetch_related("user").annotate(
         reviews_count=Count("reviews")
@@ -77,9 +92,18 @@ class BlogListView(generic.ListView):
 
 
 class BlogSingleView(generic.TemplateView):
-    template_name = 'blog-single.html'
+    """
+    Displays a single blog post.
+    """
+
+    template_name = "blog-single.html"
+
 
 class SingleCarView(generic.DetailView):
+    """
+    Displays a single car that users can reserve, including the car's details and reviews.
+    """
+
     template_name = "car-single.html"
     queryset = (
         Car.objects.prefetch_related(
@@ -99,7 +123,11 @@ class SingleCarView(generic.DetailView):
         return ctx
 
 
-class CarDeleteView(CompanyRequiredMixin,generic.DeleteView):
+class CarDeleteView(CompanyRequiredMixin, generic.DeleteView):
+    """
+    Allows companies to delete their cars.
+    """
+
     model = Car
 
     def get_success_url(self):
@@ -109,15 +137,19 @@ class CarDeleteView(CompanyRequiredMixin,generic.DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class CarUpdateView(CompanyRequiredMixin,generic.UpdateView):
+class CarUpdateView(CompanyRequiredMixin, generic.UpdateView):
+    """
+    Allows companies to update their cars.
+    """
+
     model = Car
     form_class = CarsForm
     template_name = "update_car.html"
     context_object_name = "car"
-    
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['brand_models'] = Brand_Model.objects.all()
+        ctx["brand_models"] = Brand_Model.objects.all()
         return ctx
 
     def get_success_url(self):
@@ -128,15 +160,19 @@ class CarUpdateView(CompanyRequiredMixin,generic.UpdateView):
         return super().form_valid(form)
 
 
-class CarCreateView(CompanyRequiredMixin,generic.CreateView):
+class CarCreateView(CompanyRequiredMixin, generic.CreateView):
+    """
+    Allows companies to add new cars .
+    """
+
     model = Car
     form_class = CarsForm
     template_name = "add_car.html"
     context_object_name = "car"
-    
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['brand_models'] = Brand_Model.objects.all()
+        ctx["brand_models"] = Brand_Model.objects.all()
         return ctx
 
     def get_success_url(self):
@@ -148,10 +184,18 @@ class CarCreateView(CompanyRequiredMixin,generic.CreateView):
 
 
 class AboutTemplateView(generic.TemplateView):
+    """
+    Displays information about the carbook website.
+    """
+
     template_name = "about.html"
 
 
 class ReservationView(LoginRequiredMixin, generic.CreateView):
+    """
+    Allows users to reserve a car by filling out a form.
+    """
+
     template_name = "reservation_form.html"
     login_url = "/login/"
 
@@ -172,6 +216,11 @@ class ReservationView(LoginRequiredMixin, generic.CreateView):
 
 
 class AddCarToCart(View):
+    """
+    Adds a car and start_date and end_date to the user's cart if user is authenticated,
+    or add these data into session cause we want this data in reservation.
+    """
+
     def post(self, request, *args, **kwargs):
         car_id = int(request.POST.get("car_id"))
         start_date = request.POST.get("start_date")
@@ -198,7 +247,11 @@ class AddCarToCart(View):
         return redirect("reservation_form")
 
 
+@login_required(login_url="login")
 def DeleteReservation(request, id):
+    """
+    allow user to delete reservation.
+    """
     if request.method == "GET":
         reservation = Reservation.objects.get(id=id)
         if reservation.status == "paid":
@@ -208,6 +261,10 @@ def DeleteReservation(request, id):
 
 
 class ContactUsView(generic.CreateView):
+    """
+    Allows users to contact the carbook website admins by filling out a form.
+    """
+
     template_name = "contact.html"
     form_class = ContactUsForm
     model = ContactUs
