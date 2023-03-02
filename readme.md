@@ -108,7 +108,9 @@ Open the web browser and go to http://localhost:8000/admin.
 
 - fill a reaservation form to complete reservation.
 
-- Enter payment information and complete the checkout process.
+- Enter payment information and complete the checkout process.(payment is in test mode only takes fake data)
+
+-card number (4242 4242 4242 4242) with any exp date and cvc will work
 
 - View reservations on the user profile (profile icon in navbar) and cancel or modify them as necessary.
 
